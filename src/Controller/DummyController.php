@@ -20,6 +20,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class DummyController extends AbstractController
 {
     #[Route('/dummies', name: 'dummies', methods: ["GET"])]
+    #[IsGranted("IS_AUTHENTICATED")]
     public function index(
         DummyRepository          $dummyRepository,
         Request                  $request,

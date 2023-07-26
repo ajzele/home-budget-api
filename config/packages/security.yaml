@@ -9,13 +9,17 @@ security:
             entity:
                 class: App\Entity\User
                 property: username
+        api_user_provider:
+            entity:
+                class: App\Entity\User
+                property: token
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
             stateless: true
-            provider: app_user_provider
+            provider: api_user_provider
             custom_authenticators:
                 - App\Security\TokenAuthenticator
 
