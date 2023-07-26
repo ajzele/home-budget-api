@@ -41,7 +41,8 @@ class DummyController extends AbstractController
     }
 
     #[Route("/dummies/{id}", "get_dummy", methods: ["GET"])]
-    public function getTodo(
+    #[IsGranted("IS_AUTHENTICATED")]
+    public function getDummy(
         Dummy $dummy
     ): JsonResponse
     {
@@ -49,6 +50,7 @@ class DummyController extends AbstractController
     }
 
     #[Route("/dummies", "create_dummy", methods: ["POST"])]
+    #[IsGranted("IS_AUTHENTICATED")]
     public function createDummy(
         Request                $request,
         ValidatorInterface     $validator,
@@ -82,6 +84,7 @@ class DummyController extends AbstractController
     }
 
     #[Route("/dummies/{id}", "update_dummy", methods: ["PATCH", "PUT"])]
+    #[IsGranted("IS_AUTHENTICATED")]
     public function updateDummy(
         Dummy                  $dummy,
         Request                $request,
@@ -124,6 +127,7 @@ class DummyController extends AbstractController
     }
 
     #[Route("/dummies/{id}", "delete_dummy", methods: ["DELETE"])]
+    #[IsGranted("IS_AUTHENTICATED")]
     public function deleteDummy(
         Dummy                  $dummy,
         EntityManagerInterface $entityManager
