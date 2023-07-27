@@ -7,9 +7,28 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Doctrine\Orm\Filter\RangeFilter;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 
 #[ORM\Entity]
 #[ApiResource]
+#[ApiFilter(SearchFilter::class,
+    properties: [
+        'id' => 'exact',
+        'amount' => 'exact',
+        'category' => 'exact',
+        'name' => 'partial'
+    ])]
+#[ApiFilter(DateFilter::class,
+    properties: ['createdAt', 'updatedAt'])]
+#[ApiFilter(RangeFilter::class,
+    properties: ['amount'])]
+#[ApiFilter(OrderFilter::class,
+    properties: ['id' => 'ASC', 'name' => 'DESC'],
+    arguments: ['orderParameterName' => 'order'])]
 class Expense
 {
     #[ORM\Id]
