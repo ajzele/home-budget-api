@@ -25,38 +25,28 @@ class Category
     #[ORM\Column(type: 'datetime')]
     public ?\DateTime $updatedAt = null;
 
-//    /**
-//     * @return int
-//     */
-//    public function getId(): int
-//    {
-//        return $this->id;
-//    }
-//
-//
-//
-//    /**
-//     * @return string
-//     */
-//    public function getName(): string
-//    {
-//        return $this->name;
-//    }
-//
-//    /**
-//     * @param string $name
-//     */
-//    public function setName(string $name): void
-//    {
-//        $this->name = $name;
-//    }
-
     /**
      * @return int
      */
     public function getId(): int
     {
         return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName(string $name): void
+    {
+        $this->name = $name;
     }
 
     public function getCreatedAt(): ?\DateTime
