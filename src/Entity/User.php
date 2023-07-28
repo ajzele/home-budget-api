@@ -162,7 +162,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     #[ORM\PrePersist]
-    public function setCreatedAt(): self
+    public function setCreatedAt($createdAt): self
     {
         $this->createdAt = new \DateTime('now');
 
@@ -176,7 +176,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\PrePersist]
     #[ORM\PreUpdate]
-    public function setUpdatedAt(): self
+    public function setUpdatedAt($updatedAt): self
     {
         $this->updatedAt = new \DateTime('now');
 

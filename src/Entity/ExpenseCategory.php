@@ -55,7 +55,7 @@ class ExpenseCategory
     }
 
     #[ORM\PrePersist]
-    public function setCreatedAt(): self
+    public function setCreatedAt($createdAt): self
     {
         $this->createdAt = new \DateTime('now');
 
@@ -69,7 +69,7 @@ class ExpenseCategory
 
     #[ORM\PrePersist]
     #[ORM\PreUpdate]
-    public function setUpdatedAt(): self
+    public function setUpdatedAt($updatedAt): self
     {
         $this->updatedAt = new \DateTime('now');
 

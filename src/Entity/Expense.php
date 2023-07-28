@@ -47,7 +47,7 @@ class Expense
 
     #[ORM\ManyToOne(targetEntity: "ExpenseCategory")]
     #[ORM\JoinColumn(nullable: false)]
-    private Category $category;
+    private ExpenseCategory $category;
 
     #[ORM\Column(type: 'datetime')]
     private \DateTime $createdAt;
@@ -93,17 +93,17 @@ class Expense
     }
 
     /**
-     * @return Category
+     * @return ExpenseCategory
      */
-    public function getCategory(): Category
+    public function getCategory(): ExpenseCategory
     {
         return $this->category;
     }
 
     /**
-     * @param Category $category
+     * @param ExpenseCategory $category
      */
-    public function setCategory(Category $category): void
+    public function setCategory(ExpenseCategory $category): void
     {
         $this->category = $category;
     }
@@ -114,7 +114,7 @@ class Expense
     }
 
     #[ORM\PrePersist]
-    public function setCreatedAt(): self
+    public function setCreatedAt($createdAt): self
     {
         $this->createdAt = new \DateTime('now');
 
@@ -128,7 +128,7 @@ class Expense
 
     #[ORM\PrePersist]
     #[ORM\PreUpdate]
-    public function setUpdatedAt(): self
+    public function setUpdatedAt($updatedAt): self
     {
         $this->updatedAt = new \DateTime('now');
 
