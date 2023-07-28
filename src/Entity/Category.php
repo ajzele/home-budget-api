@@ -5,8 +5,10 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 
 #[ORM\Entity]
+#[ORM\HasLifecycleCallbacks]
 #[ApiResource]
 class Category
 {
@@ -20,10 +22,10 @@ class Category
     public string $name;
 
     #[ORM\Column(type: 'datetime')]
-    public ?\DateTime $createdAt = null;
+    private \DateTime $createdAt;
 
     #[ORM\Column(type: 'datetime')]
-    public ?\DateTime $updatedAt = null;
+    private \DateTime $updatedAt;
 
     /**
      * @return int
@@ -49,7 +51,7 @@ class Category
         $this->name = $name;
     }
 
-    public function getCreatedAt(): ?\DateTime
+    public function getCreatedAt(): \DateTime
     {
         return $this->createdAt;
     }
@@ -57,12 +59,12 @@ class Category
     #[ORM\PrePersist]
     public function setCreatedAt(): self
     {
-        $this->createdAt = new DateTime('now');
+        $this->createdAt = new \DateTime('now');
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTime
+    public function getUpdatedAt(): \DateTime
     {
         return $this->updatedAt;
     }
@@ -71,7 +73,7 @@ class Category
     #[ORM\PreUpdate]
     public function setUpdatedAt(): self
     {
-        $this->updatedAt = new DateTime('now');
+        $this->updatedAt = new \DateTime('now');
 
         return $this;
     }

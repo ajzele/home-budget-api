@@ -12,8 +12,10 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
 use ApiPlatform\Doctrine\Orm\Filter\RangeFilter;
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 
 #[ORM\Entity]
+#[ORM\HasLifecycleCallbacks]
 #[ApiResource]
 #[ApiFilter(SearchFilter::class,
     properties: [
@@ -48,10 +50,10 @@ class Expense
     private Category $category;
 
     #[ORM\Column(type: 'datetime')]
-    private ?\DateTime $createdAt;
+    private \DateTime $createdAt;
 
     #[ORM\Column(type: 'datetime')]
-    private ?\DateTime $updatedAt;
+    private \DateTime $updatedAt;
 
     public function getId(): ?int
     {
@@ -106,26 +108,27 @@ class Expense
         $this->category = $category;
     }
 
-    public function getCreatedAt(): ?\DateTime
+    public function getCreatedAt(): \DateTime
     {
         return $this->createdAt;
     }
 
     #[ORM\PrePersist]
-    public function setCreatedAt(\DateTime $createdAt): self
+    public function setCreatedAt(): self
     {
         $this->createdAt = new \DateTime('now');
+
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTime
+    public function getUpdatedAt(): \DateTime
     {
         return $this->updatedAt;
     }
 
     #[ORM\PrePersist]
     #[ORM\PreUpdate]
-    public function setUpdatedAt(\DateTime $updatedAt): self
+    public function setUpdatedAt(): self
     {
         $this->updatedAt = new \DateTime('now');
 

@@ -5,8 +5,10 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 
 #[ORM\Entity]
+#[ORM\HasLifecycleCallbacks]
 #[ApiResource]
 class Income
 {
@@ -27,10 +29,10 @@ class Income
     private Category $category;
 
     #[ORM\Column(type: 'datetime')]
-    private ?\DateTime $createdAt;
+    private \DateTime $createdAt;
 
     #[ORM\Column(type: 'datetime')]
-    private ?\DateTime $updatedAt;
+    private \DateTime $updatedAt;
 
     public function getId(): ?int
     {
@@ -85,26 +87,27 @@ class Income
         $this->category = $category;
     }
 
-    public function getCreatedAt(): ?\DateTime
+    public function getCreatedAt(): \DateTime
     {
         return $this->createdAt;
     }
 
     #[ORM\PrePersist]
-    public function setCreatedAt(\DateTime $createdAt): self
+    public function setCreatedAt(): self
     {
         $this->createdAt = new \DateTime('now');
+
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTime
+    public function getUpdatedAt(): \DateTime
     {
         return $this->updatedAt;
     }
 
     #[ORM\PrePersist]
     #[ORM\PreUpdate]
-    public function setUpdatedAt(\DateTime $updatedAt): self
+    public function setUpdatedAt(): self
     {
         $this->updatedAt = new \DateTime('now');
 
