@@ -21,12 +21,12 @@ use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 
 #[ApiResource(
     operations: [
-        new GetCollection(),
-        new Post(processor: UserPasswordHasher::class, validationContext: ['groups' => ['Default', 'user:create']]),
-        new Get(),
-        new Put(processor: UserPasswordHasher::class),
-        new Patch(processor: UserPasswordHasher::class),
-        new Delete(),
+        new GetCollection(uriTemplate: 'users'),
+        new Post(uriTemplate: 'users', validationContext: ['groups' => ['Default', 'user:create']], processor: UserPasswordHasher::class),
+        new Get(uriTemplate: 'users/{id}'),
+        new Put(uriTemplate: 'users/{id}', processor: UserPasswordHasher::class),
+        new Patch(uriTemplate: 'users/{id}', processor: UserPasswordHasher::class),
+        new Delete(uriTemplate: 'users/{id}'),
     ],
     normalizationContext: ['groups' => ['user:read']],
     denormalizationContext: ['groups' => ['user:create', 'user:update']],
@@ -207,7 +207,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string)$this->email;
+        return (string)$this->token;
     }
 
     /**

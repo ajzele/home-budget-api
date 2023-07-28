@@ -3,54 +3,73 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
-use App\State\ExpenseCategoryProcessor;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use ApiPlatform\Metadata\ApiProperty;
 
 #[ORM\Entity]
 #[ORM\HasLifecycleCallbacks]
-#[ApiResource(processor: ExpenseCategoryProcessor::class)]
+#[ApiResource(
+    operations: [
+        new Delete(uriTemplate: 'expense_categories/{id}'),
+        new Get(uriTemplate: 'expense_categories/{id}'),
+        new Put(uriTemplate: 'expense_categories/{id}'),
+        new Patch(uriTemplate: 'expense_categories/{id}'),
+        new GetCollection(uriTemplate: 'expense_categories'),
+        new Post(uriTemplate: 'expense_categories')
+    ],
+    normalizationContext: ['groups' => ['output']],
+    denormalizationContext: ['groups' => ['input']],
+)]
 class ExpenseCategory
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: "integer")]
     #[ApiProperty(identifier: true)]
-    protected ?int $id;
+    #[Groups(['output'])]
+    private ?int $id = null;
 
     #[ORM\ManyToOne]
-    protected ?User $owner = null;
+    #[Groups(['output'])]
+    private ?User $owner = null;
 
     #[ORM\Column(type: "string", length: 255)]
     #[Assert\NotBlank]
-    public string $name;
+    #[Groups(['output', 'input'])]
+    private string $name;
 
     #[ORM\Column(type: 'datetime')]
-    protected \DateTime $createdAt;
+    #[Groups(['output'])]
+    private ?\DateTime $createdAt = null;
 
     #[ORM\Column(type: 'datetime')]
-    protected \DateTime $updatedAt;
+    #[Groups(['output'])]
+    private ?\DateTime $updatedAt = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @return User
-     */
+    #[Groups(['can_get_one', 'can_get_all'])]
     public function getOwner(): User
     {
         return $this->owner;
     }
 
-    /**
-     * @param User $owner
-     */
-    public function setOwner(User $owner): void
+    #[Groups(['can_get_one', 'can_get_all'])]
+    public function setOwner(User $owner): self
     {
         $this->owner = $owner;
+        return $this;
     }
 
     /**
@@ -64,35 +83,31 @@ class ExpenseCategory
     /**
      * @param string $name
      */
-    public function setName(string $name): void
+    public function setName(string $name): self
     {
         $this->name = $name;
+        return $this;
     }
 
-    public function getCreatedAt(): \DateTime
+    public function getCreatedAt(): ?\DateTime
     {
         return $this->createdAt;
     }
 
-    #[ORM\PrePersist]
     public function setCreatedAt($createdAt): self
     {
-        $this->createdAt = new \DateTime('now');
-
+        $this->createdAt = $createdAt;
         return $this;
     }
 
-    public function getUpdatedAt(): \DateTime
+    public function getUpdatedAt(): ?\DateTime
     {
         return $this->updatedAt;
     }
 
-    #[ORM\PrePersist]
-    #[ORM\PreUpdate]
     public function setUpdatedAt($updatedAt): self
     {
-        $this->updatedAt = new \DateTime('now');
-
+        $this->updatedAt = $updatedAt;
         return $this;
     }
 }

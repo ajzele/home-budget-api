@@ -45,32 +45,11 @@ class ApiKeyAuthenticator extends AbstractAuthenticator
             throw new CustomUserMessageAuthenticationException('No ' . self::HOME_BUDGET_HEADER_AUTH_TOKEN . ' token provided in header');
         }
 
-        return new SelfValidatingPassport(new UserBadge($token));
-
-//        $email = 'runolfsdottir.giovanni@waelchi.biz';
-//        $userIdentifier = 'runolfsdottir.giovanni@waelchi.biz';
-//        $credentials = 'ChangeMe!';
-//
-//        return new Passport(
-//            new UserBadge($userIdentifier, function (string $userIdentifier): ?UserInterface {
-//                return $this->userRepository->findOneBy(['email' => $userIdentifier]);
-//            }),
-//            $credentials
-//        );
-
-
-//        return new Passport(new UserBadge($email), new CustomCredentials(
-//        // If this function returns anything else than `true`, the credentials
-//        // are marked as invalid.
-//        // The $credentials parameter is equal to the next argument of this class
-//            function (string $credentials, UserInterface $user): bool {
-//                return $user->getToken() === $credentials;
-//            },
-//
-//            // The custom credentials
-//            $token
-//        ));
-
+        return new SelfValidatingPassport(
+            new UserBadge($token, function () use ($token) {
+                return $this->userRepository->findOneBy(['token' => $token]);
+            })
+        );
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
