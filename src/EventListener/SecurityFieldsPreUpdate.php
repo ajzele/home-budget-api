@@ -20,15 +20,15 @@ readonly class SecurityFieldsPreUpdate
          * fix-setting the owner of an object, since I am getting some strange error with API platform state processors
          */
 
-        if (\method_exists($entity, 'setOwner')) {
+        if (\method_exists($entity, 'setOwner') && (($args->getEntityChangeSet()['owner'] ?? null) != null)) {
             $entity->setOwner($args->getOldValue('owner'));
         }
 
-        if (\method_exists($entity, 'setCreatedAt')) {
+        if (\method_exists($entity, 'setCreatedAt') && (($args->getEntityChangeSet()['createdAt'] ?? null) != null)) {
             $entity->setCreatedAt($args->getOldValue('createdAt'));
         }
 
-        if (\method_exists($entity, 'setUpdatedAt')) {
+        if (\method_exists($entity, 'setUpdatedAt') && (($args->getEntityChangeSet()['updatedAt'] ?? null) != null)) {
             $entity->setUpdatedAt(new \DateTime('now'));
         }
     }

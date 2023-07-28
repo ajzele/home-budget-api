@@ -9,6 +9,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use App\Controller\UserLogin as UserLoginController;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use App\State\UserPasswordHasher;
@@ -21,6 +22,40 @@ use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 
 #[ApiResource(
     operations: [
+        new Post(
+            uriTemplate: '/users/login',
+            controller: UserLoginController::class,
+            openapiContext: [
+                'summary' => 'Authenticate a user with email and password',
+                'requestBody' => [
+                    'content' => [
+                        'application/json' => [
+                            'schema' => [
+                                'type' => 'object',
+                                'properties' => [
+                                    'email' => ['type' => 'string'],
+                                    'password' => ['type' => 'string'],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'responses' => [
+                    '200' => [
+                        'description' => 'Authentication successful',
+                        'content' => [
+                            'application/json' => [],
+                        ],
+                    ],
+                    '401' => [
+                        'description' => 'Authentication failed',
+                        'content' => [
+                            'application/json' => [],
+                        ],
+                    ],
+                ],
+            ]
+        ),
         new GetCollection(uriTemplate: 'users'),
         new Post(uriTemplate: 'users', validationContext: ['groups' => ['Default', 'user:create']], processor: UserPasswordHasher::class),
         new Get(uriTemplate: 'users/{id}'),
