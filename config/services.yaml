@@ -24,5 +24,11 @@ services:
         bind:
             $processor: '@api_platform.doctrine.orm.state.persist_processor'
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+    App\Doctrine\CurrentUserExtension:
+        tags:
+            - { name: api_platform.doctrine.orm.query_extension.collection }
+            - { name: api_platform.doctrine.orm.query_extension.item }
+
+#    App\State\OwnerStateProvider:
+#      # Uncomment only if autoconfiguration is disabled
+#        tags: [ 'api_platform.state_provider' ]
