@@ -5,32 +5,30 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
+use ApiPlatform\Metadata\ApiProperty;
 
 #[ORM\Entity]
 #[ORM\HasLifecycleCallbacks]
 #[ApiResource]
-class Category
+class IncomeCategory
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: "integer")]
-    private int $id;
+    #[ApiProperty(identifier: true)]
+    protected ?int $id;
 
     #[ORM\Column(type: "string", length: 255)]
     #[Assert\NotBlank]
     public string $name;
 
     #[ORM\Column(type: 'datetime')]
-    private \DateTime $createdAt;
+    protected \DateTime $createdAt;
 
     #[ORM\Column(type: 'datetime')]
-    private \DateTime $updatedAt;
+    protected \DateTime $updatedAt;
 
-    /**
-     * @return int
-     */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }

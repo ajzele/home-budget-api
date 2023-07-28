@@ -45,7 +45,7 @@ class Expense
     #[ORM\Column(type: "decimal", precision: 10, scale: 2)]
     private float $amount;
 
-    #[ORM\ManyToOne(targetEntity: "Category")]
+    #[ORM\ManyToOne(targetEntity: "ExpenseCategory")]
     #[ORM\JoinColumn(nullable: false)]
     private Category $category;
 
