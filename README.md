@@ -18,3 +18,9 @@ Generation itself is done via `php bin/console make:fixtures TodoFixtures`.
 Fixtures end up in `src/DataFixtures` directory.
 
 To load the fixtures into database `php bin/console doctrine:fixtures:load`.
+
+
+## Debug with POSTMAN
+
+Set header "Cookie" = "XDEBUG_SESSION=XDEBUG_ECLIPSE"
+Set header "HB-AUTH-TOKEN" = some value from user.token table.column.
