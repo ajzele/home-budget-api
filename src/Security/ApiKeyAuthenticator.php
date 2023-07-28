@@ -42,7 +42,7 @@ class ApiKeyAuthenticator extends AbstractAuthenticator
         $token = $request->headers->get(self::HOME_BUDGET_HEADER_AUTH_TOKEN);
 
         if (null === $token) {
-            throw new CustomUserMessageAuthenticationException('No ' . self::HOME_BUDGET_HEADER_AUTH_TOKEN . ' token provided in header');
+            throw new CustomUserMessageAuthenticationException('Authentication failed; no ' . self::HOME_BUDGET_HEADER_AUTH_TOKEN . ' token provided in header');
         }
 
         return new SelfValidatingPassport(

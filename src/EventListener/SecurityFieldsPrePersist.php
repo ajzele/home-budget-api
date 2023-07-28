@@ -29,7 +29,10 @@ readonly class SecurityFieldsPrePersist
 
         if (\method_exists($entity, 'setOwner')) {
             $user = $this->security->getUser();
-            $entity->setOwner($user);
+            // prePersist happens only once, when object created
+            if ($user) {
+                $entity->setOwner($user);
+            }
         }
 
         if (\method_exists($entity, 'setCreatedAt')) {
