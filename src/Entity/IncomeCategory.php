@@ -18,6 +18,9 @@ class IncomeCategory
     #[ApiProperty(identifier: true)]
     protected ?int $id;
 
+    #[ORM\ManyToOne]
+    protected ?User $owner = null;
+
     #[ORM\Column(type: "string", length: 255)]
     #[Assert\NotBlank]
     public string $name;
@@ -31,6 +34,22 @@ class IncomeCategory
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    /**
+     * @return User
+     */
+    public function getOwner(): User
+    {
+        return $this->owner;
+    }
+
+    /**
+     * @param User $owner
+     */
+    public function setOwner(User $owner): void
+    {
+        $this->owner = $owner;
     }
 
     /**

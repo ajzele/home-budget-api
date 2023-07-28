@@ -55,8 +55,7 @@ final class UserFactory extends ModelFactory
             'lastname' => self::faker()->lastName(),
             'password' => 'ChangeMe!',
             'roles' => [],
-            // 'token' => \bin2hex(random_bytes(18)),
-            // 'username' => self::faker()->userName(),
+            'token' => \bin2hex(random_bytes(18)),
         ];
     }
 

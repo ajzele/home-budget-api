@@ -47,9 +47,10 @@ final class IncomeCategoryFactory extends ModelFactory
     protected function getDefaults(): array
     {
         return [
-            'createdAt' => self::faker()->dateTime(),
+            'owner' => UserFactory::new(),
             'name' => self::faker()->text(255),
-            'updatedAt' => self::faker()->dateTime(),
+            // 'createdAt' => self::faker()->dateTime(),
+            // 'updatedAt' => self::faker()->dateTime(),
         ];
     }
 

@@ -47,6 +47,7 @@ final class ExpenseCategoryFactory extends ModelFactory
     protected function getDefaults(): array
     {
         return [
+            'owner' => UserFactory::new(),
             'name' => self::faker()->text(255),
             // 'createdAt' => self::faker()->dateTime(),
             // 'updatedAt' => self::faker()->dateTime(),

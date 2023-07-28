@@ -3,13 +3,14 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use App\State\ExpenseCategoryProcessor;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use ApiPlatform\Metadata\ApiProperty;
 
 #[ORM\Entity]
 #[ORM\HasLifecycleCallbacks]
-#[ApiResource]
+#[ApiResource(processor: ExpenseCategoryProcessor::class)]
 class ExpenseCategory
 {
     #[ORM\Id]
@@ -17,6 +18,9 @@ class ExpenseCategory
     #[ORM\Column(type: "integer")]
     #[ApiProperty(identifier: true)]
     protected ?int $id;
+
+    #[ORM\ManyToOne]
+    protected ?User $owner = null;
 
     #[ORM\Column(type: "string", length: 255)]
     #[Assert\NotBlank]
@@ -31,6 +35,22 @@ class ExpenseCategory
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    /**
+     * @return User
+     */
+    public function getOwner(): User
+    {
+        return $this->owner;
+    }
+
+    /**
+     * @param User $owner
+     */
+    public function setOwner(User $owner): void
+    {
+        $this->owner = $owner;
     }
 
     /**
