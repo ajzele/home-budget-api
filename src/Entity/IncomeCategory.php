@@ -7,13 +7,28 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use ApiPlatform\Metadata\ApiProperty;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 
 #[ORM\Entity]
 #[ORM\HasLifecycleCallbacks]
 #[ApiResource(
     normalizationContext: ['groups' => ['output']],
     denormalizationContext: ['groups' => ['input']],
+    security: "is_granted('ROLE_USER')",
 )]
+#[ApiFilter(SearchFilter::class,
+    properties: [
+        'id' => 'exact',
+        'name' => 'partial'
+    ])]
+#[ApiFilter(DateFilter::class,
+    properties: ['createdAt', 'updatedAt'])]
+#[ApiFilter(OrderFilter::class,
+    properties: ['id' => 'ASC', 'name' => 'DESC'],
+    arguments: ['orderParameterName' => 'order'])]
 class IncomeCategory
 {
     #[ORM\Id]

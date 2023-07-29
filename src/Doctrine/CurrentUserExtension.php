@@ -13,7 +13,7 @@ use App\Entity\IncomeCategory;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\SecurityBundle\Security;
 
-final readonly class CurrentUserExtension implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
+final class CurrentUserExtension implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
 {
     /**
      * @todo refactor?!

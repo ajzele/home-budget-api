@@ -9,7 +9,7 @@ use Doctrine\ORM\Events;
 use Symfony\Bundle\SecurityBundle\Security;
 
 #[AsDoctrineListener(event: Events::preRemove)]
-readonly class SecurityFieldsPreRemove
+class SecurityFieldsPreRemove
 {
     public function __construct(
         private Security $security

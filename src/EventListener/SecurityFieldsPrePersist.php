@@ -9,7 +9,7 @@ use Doctrine\ORM\Events;
 use Symfony\Bundle\SecurityBundle\Security;
 
 #[AsDoctrineListener(event: Events::prePersist)]
-readonly class SecurityFieldsPrePersist
+class SecurityFieldsPrePersist
 {
     public function __construct(
         private Security $security
@@ -29,7 +29,7 @@ readonly class SecurityFieldsPrePersist
 
         if (\method_exists($entity, 'setOwner')) {
             $user = $this->security->getUser();
-            // prePersist happens only once, when object created
+            // prePersist happens only once, when object created, so this should be fine for both API and CLI (factory load)
             if ($user) {
                 $entity->setOwner($user);
             }

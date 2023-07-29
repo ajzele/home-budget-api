@@ -18,7 +18,6 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 
 #[ApiResource(
     operations: [
@@ -56,12 +55,11 @@ use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
                 ],
             ]
         ),
-        new GetCollection(uriTemplate: 'users'),
         new Post(uriTemplate: 'users', validationContext: ['groups' => ['Default', 'user:create']], processor: UserPasswordHasher::class),
-        new Get(uriTemplate: 'users/{id}'),
-        new Put(uriTemplate: 'users/{id}', processor: UserPasswordHasher::class),
+        new Get(uriTemplate: 'users/{id}', security: "is_granted('ROLE_ADMIN') or object.owner == user"),
+        new Put(uriTemplate: 'users/{id}', security: "is_granted('ROLE_ADMIN') or object.owner == user", processor: UserPasswordHasher::class),
         new Patch(uriTemplate: 'users/{id}', processor: UserPasswordHasher::class),
-        new Delete(uriTemplate: 'users/{id}'),
+        new Delete(uriTemplate: 'users/{id}', description: "Removes the User resource. Operation available to ROLE_ADMIN only.", security: "is_granted('ROLE_ADMIN')"),
     ],
     normalizationContext: ['groups' => ['user:read']],
     denormalizationContext: ['groups' => ['user:create', 'user:update']],
@@ -101,9 +99,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['user:create', 'user:update'])]
     private ?string $plainPassword = null;
 
-    #[Assert\NotBlank]
-    #[Groups(['user:read', 'user:create', 'user:update'])]
-    #[ORM\Column(length: 36)]
+    #[Groups(['user:read'])]
+    #[ORM\Column(length: 36, nullable: true)]
     private ?string $token = null;
 
     #[ORM\Column(type: 'json')]
@@ -167,9 +164,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @see PasswordAuthenticatedUserInterface
-     */
     public function getPassword(): string
     {
         return $this->password;
@@ -192,14 +186,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @see UserInterface
-     */
     public function getRoles(): array
     {
         $roles = $this->roles;
         $roles[] = 'ROLE_USER';
-        return array_unique($roles);
+        return \array_unique($roles);
     }
 
     public function setRoles(array $roles): self
@@ -213,7 +204,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->createdAt;
     }
 
-    #[ORM\PrePersist]
     public function setCreatedAt($createdAt): self
     {
         $this->createdAt = new \DateTime('now');
@@ -226,8 +216,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->updatedAt;
     }
 
-    #[ORM\PrePersist]
-    #[ORM\PreUpdate]
     public function setUpdatedAt($updatedAt): self
     {
         $this->updatedAt = new \DateTime('now');
@@ -235,19 +223,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
-     */
     public function getUserIdentifier(): string
     {
         return (string)$this->token;
     }
 
-    /**
-     * @see UserInterface
-     */
     public function eraseCredentials(): void
     {
         $this->plainPassword = null;

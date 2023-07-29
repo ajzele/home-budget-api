@@ -1,27 +1,28 @@
 <?php
 
-// src/Entity/Expense.php
-
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\RangeFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-use ApiPlatform\Metadata\ApiFilter;
-use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
-use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
-use ApiPlatform\Doctrine\Orm\Filter\RangeFilter;
-use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
-use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 
 #[ORM\Entity]
 #[ORM\HasLifecycleCallbacks]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['output']],
+    denormalizationContext: ['groups' => ['input']],
+    security: "is_granted('ROLE_USER')",
+)]
 #[ApiFilter(SearchFilter::class,
     properties: [
         'id' => 'exact',
-        'amount' => 'exact',
-        'category' => 'exact',
         'name' => 'partial'
     ])]
 #[ApiFilter(DateFilter::class,
@@ -36,102 +37,102 @@ class Expense
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: "integer")]
-    private int $id;
+    #[ApiProperty(identifier: true)]
+    #[Groups(['output'])]
+    private ?int $id = null;
+
+    #[ORM\ManyToOne]
+    #[Groups(['output'])]
+    private ?User $owner = null;
 
     #[ORM\Column(type: "string", length: 255)]
     #[Assert\NotBlank]
-    public string $name;
+    #[Groups(['output', 'input'])]
+    private string $name;
 
     #[ORM\Column(type: "decimal", precision: 10, scale: 2)]
+    #[Groups(['output', 'input'])]
     private float $amount;
 
     #[ORM\ManyToOne(targetEntity: "ExpenseCategory")]
     #[ORM\JoinColumn(nullable: false)]
-    private ExpenseCategory $category;
+    #[Assert\NotBlank]
+    #[Groups(['output', 'input'])]
+    private ?ExpenseCategory $category = null;
 
     #[ORM\Column(type: 'datetime')]
-    private \DateTime $createdAt;
+    #[Groups(['output'])]
+    private ?\DateTime $createdAt = null;
 
     #[ORM\Column(type: 'datetime')]
-    private \DateTime $updatedAt;
+    #[Groups(['output'])]
+    private ?\DateTime $updatedAt = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
+    public function getOwner(): User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(User $owner): self
+    {
+        $this->owner = $owner;
+        return $this;
+    }
+
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     */
     public function setName(string $name): void
     {
         $this->name = $name;
     }
 
-    /**
-     * @return float
-     */
     public function getAmount(): float
     {
         return $this->amount;
     }
 
-    /**
-     * @param float $amount
-     */
     public function setAmount(float $amount): void
     {
         $this->amount = $amount;
     }
 
-    /**
-     * @return ExpenseCategory
-     */
-    public function getCategory(): ExpenseCategory
+    public function getCategory(): ?ExpenseCategory
     {
         return $this->category;
     }
 
-    /**
-     * @param ExpenseCategory $category
-     */
     public function setCategory(ExpenseCategory $category): void
     {
         $this->category = $category;
     }
 
-    public function getCreatedAt(): \DateTime
+    public function getCreatedAt(): ?\DateTime
     {
         return $this->createdAt;
     }
 
-    #[ORM\PrePersist]
     public function setCreatedAt($createdAt): self
     {
-        $this->createdAt = new \DateTime('now');
-
+        $this->createdAt = $createdAt;
         return $this;
     }
 
-    public function getUpdatedAt(): \DateTime
+    public function getUpdatedAt(): ?\DateTime
     {
         return $this->updatedAt;
     }
 
-    #[ORM\PrePersist]
-    #[ORM\PreUpdate]
     public function setUpdatedAt($updatedAt): self
     {
-        $this->updatedAt = new \DateTime('now');
-
+        $this->updatedAt = $updatedAt;
         return $this;
     }
 }

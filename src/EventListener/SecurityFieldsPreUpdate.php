@@ -8,7 +8,7 @@ use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
 use Doctrine\ORM\Events;
 
 #[AsDoctrineListener(event: Events::preUpdate)]
-readonly class SecurityFieldsPreUpdate
+class SecurityFieldsPreUpdate
 {
     public function preUpdate(PreUpdateEventArgs $args): void
     {
