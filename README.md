@@ -34,7 +34,10 @@ Once your local environment is sorted to run Symfony project; we need to take th
     income_category
     user
     ```
-* You should also be able to open your browser and point to **base URL of your locally set project**, and see the local [Swagger](https://swagger.io/tools/swagger-ui/) interface showing **HOME BUDGET ❤ API Platform** title and a list of various API endpoints.
+* You should also be able to open your browser and point to **base URL of your locally set project**, and see the local [Swagger](https://swagger.io/tools/swagger-ui/) interface showing **HOME BUDGET ❤ API Platform** title and a list of various API endpoints as shown below.
+
+![HOME BUDGET ❤ API Platform](docs/API-screenshot.png "Title")
+
 
 From here on you should be able to:
 - Use the local [Swagger](https://swagger.io/tools/swagger-ui/) interface, as documentation, to inspect available endpoints and their data structure
@@ -70,6 +73,10 @@ RESPONSE:
 }
 ```
 
+as shown below.
+
+![Postman login](docs/POSTMAN-screenshot-1.png)
+
 We should now be able to grab this token, and use with all the rest of **authenticated requests** API requests.
 
 Upon each login, database `user.token` is refreshed.
@@ -78,7 +85,9 @@ Upon each login, database `user.token` is refreshed.
 
 All requests towards endpoints must be authenticated.
 
-Simply set the header named `HB-AUTH-TOKEN` to value of user `token` we obtained during login.
+Simply set the header named `HB-AUTH-TOKEN` to value of user `token` we obtained during login, as shown below.
+
+![Postman login](docs/POSTMAN-screenshot-2.png)
 
 ### For debugging in PhpStorm
 
