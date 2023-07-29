@@ -1,8 +1,8 @@
-# HOME BUDGET ❤ API Platform
+# HOME BUDGET ❤ API Platform (MVP)
 
 The **HOME BUDGET ❤ API Platform** application is a REST API backend powered by [Symfony API Platform](https://api-platform.com/).
 
-Key features of an application:
+As minimum viable product (MVP), **HOME BUDGET ❤ API Platform** application offers following key features:
 - user register, via API `POST /users`
 - user login, via API `POST /users/login`
 - income categories management, via API `GET|POST|PUT|DELETE|PATCH /income_categories`
@@ -11,6 +11,7 @@ Key features of an application:
 - expense management, via API `GET|POST|PUT|DELETE|PATCH /expenses`
 - budget statistics (daily, weekly, monthly, quarterly, yearly), via API `GET /budget_stats`
 - each endpoint should return only the currently logged-in user data
+- filtering capabilities per each entity (`expense`, `expense_category`, `income`, `income_category`)
 
 ## Installation
 
@@ -88,6 +89,27 @@ All requests towards endpoints must be authenticated.
 Simply set the header named `HB-AUTH-TOKEN` to value of user `token` we obtained during login, as shown below.
 
 ![Postman login](docs/POSTMAN-screenshot-2.png)
+
+#### Filtering results
+
+Using the local [Swagger](https://swagger.io/tools/swagger-ui/) interface as endpoint documentation reference, we can see what parameters are available for filtering, per each resource, as shown below.
+
+![Filtering parameters](docs/API-screenshot-search-query-1.png)
+
+![Filtering parameters](docs/API-screenshot-search-query-2.png)
+
+Filtering parameters are passed as URL query, as shown in example below; where we:
+- order by name desc
+- searched for name=gift
+- amount greater than 35
+
+```
+curl -X 'GET' \
+  'https://app.home-budget.test/expenses?page=1&name=gift&amount%5Bgt%5D=35&order%5Bname%5D=desc' \
+  -H 'accept: application/ld+json'
+```
+
+For further details on how to construct URL query for filtering, see API platform documentation [here](https://api-platform.com/docs/core/filters/).  
 
 ### For debugging in PhpStorm
 
