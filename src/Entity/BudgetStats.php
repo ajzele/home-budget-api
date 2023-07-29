@@ -16,11 +16,11 @@ use App\Repository\IncomeRepository;
             controller: BudgetStatsController::class,
             read: false
         ),
-        new Get(
-            uriTemplate: '/budget_status/{income_category}/{expense_category}',
-            controller: BudgetStatsController::class,
-            read: false
-        ),
+//        new Get(
+//            uriTemplate: '/budget_status/{income_category}/{expense_category}',
+//            controller: BudgetStatsController::class,
+//            read: false
+//        ),
     ],
     security: "is_granted('ROLE_USER')"
 )]
