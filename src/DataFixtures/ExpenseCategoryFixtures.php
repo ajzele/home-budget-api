@@ -12,17 +12,19 @@ class ExpenseCategoryFixtures extends Fixture implements DependentFixtureInterfa
 {
     public function load(ObjectManager $manager): void
     {
-        $user = UserFactory::first();
+        $users = UserFactory::all();
 
-        ExpenseCategoryFactory::createOne(['owner' => $user, 'name' => 'Gifts']);
-        ExpenseCategoryFactory::createOne(['owner' => $user, 'name' => 'Health']);
-        ExpenseCategoryFactory::createOne(['owner' => $user, 'name' => 'House']);
-        ExpenseCategoryFactory::createOne(['owner' => $user, 'name' => 'Pets']);
-        ExpenseCategoryFactory::createOne(['owner' => $user, 'name' => 'Sports']);
-        ExpenseCategoryFactory::createOne(['owner' => $user, 'name' => 'Taxi']);
-        ExpenseCategoryFactory::createOne(['owner' => $user, 'name' => 'Toiletry']);
-        ExpenseCategoryFactory::createOne(['owner' => $user, 'name' => 'Transport']);
-        ExpenseCategoryFactory::createOne(['owner' => $user, 'name' => 'Entertainment']);
+        foreach ($users as $user) {
+            ExpenseCategoryFactory::createOne(['owner' => $user, 'name' => 'Gifts']);
+            ExpenseCategoryFactory::createOne(['owner' => $user, 'name' => 'Health']);
+            ExpenseCategoryFactory::createOne(['owner' => $user, 'name' => 'House']);
+            ExpenseCategoryFactory::createOne(['owner' => $user, 'name' => 'Pets']);
+            ExpenseCategoryFactory::createOne(['owner' => $user, 'name' => 'Sports']);
+            ExpenseCategoryFactory::createOne(['owner' => $user, 'name' => 'Taxi']);
+            ExpenseCategoryFactory::createOne(['owner' => $user, 'name' => 'Toiletry']);
+            ExpenseCategoryFactory::createOne(['owner' => $user, 'name' => 'Transport']);
+            ExpenseCategoryFactory::createOne(['owner' => $user, 'name' => 'Entertainment']);
+        }
     }
 
     public function getDependencies(): array

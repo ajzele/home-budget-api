@@ -46,11 +46,13 @@ final class IncomeCategoryFactory extends ModelFactory
      */
     protected function getDefaults(): array
     {
+        $time = self::faker()->dateTimeBetween('-1 years', 'now');
+
         return [
             'owner' => UserFactory::new(),
             'name' => self::faker()->text(255),
-            // 'createdAt' => self::faker()->dateTime(),
-            // 'updatedAt' => self::faker()->dateTime(),
+            'createdAt' => $time,
+            'updatedAt' => $time,
         ];
     }
 

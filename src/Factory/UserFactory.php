@@ -49,13 +49,17 @@ final class UserFactory extends ModelFactory
      */
     protected function getDefaults(): array
     {
+        $time = self::faker()->dateTimeBetween('-1 years', 'now');
+
         return [
             'email' => self::faker()->email(),
             'firstname' => self::faker()->firstName(),
             'lastname' => self::faker()->lastName(),
             'password' => 'ChangeMe!',
-            'roles' => [],
             'token' => \bin2hex(random_bytes(18)),
+            'roles' => [],
+            'createdAt' => $time,
+            'updatedAt' => $time,
         ];
     }
 

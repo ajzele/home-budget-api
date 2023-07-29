@@ -35,11 +35,11 @@ class SecurityFieldsPrePersist
             }
         }
 
-        if (\method_exists($entity, 'setCreatedAt')) {
+        if (\method_exists($entity, 'setCreatedAt') && \php_sapi_name() != 'cli') {
             $entity->setCreatedAt(new \DateTime('now'));
         }
 
-        if (\method_exists($entity, 'setUpdatedAt')) {
+        if (\method_exists($entity, 'setUpdatedAt') && \php_sapi_name() != 'cli') {
             $entity->setUpdatedAt(new \DateTime('now'));
         }
     }
